@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, seEffect, useEffect } from "react";
+import "./components/styleOne.css";
+
+function Box({ imageUrl, title }) {
+  return (
+    <div className="box">
+      <img src={imageUrl} alt="title" />
+      <h3 className="boxTitle">{title}</h3>
+    </div>
+  );
+}
 
 function App() {
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/photos")
+      .then((response) => response.json())
+      .then((data) => setPhotos(data.slice(0, 9)));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {photos.map((photo) => (
+        <Box key={photo.id} imageUrl={photo.thumbnailUrl} title={photo.title} />
+      ))}
     </div>
   );
 }
